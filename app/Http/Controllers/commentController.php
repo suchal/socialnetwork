@@ -28,4 +28,21 @@ class commentController extends Controller
     	$status->comments()->save($comment);
     	return back();
     }
+    public function edit(comment $comment){
+        $user = $this->auth->user();
+        return view("comment.edit",compact('user','comment'));
+    }
+    public function update(Request $req, comment $comment){
+        $rules = ['body'=>['required','min:3','max:200']];
+        $this->validate($req,$rules);
+        $comment->update(["body"=>$req->body]);
+        return redirect()->route('home');
+    }
+    public function deleteShow(comment $comment){
+        return view("comment.delete",compact('comment'));
+    }
+    public function delete(Request $req, comment $comment){
+        $comment->delete();
+        return redirect()->route('home');
+    }
 }

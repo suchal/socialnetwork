@@ -19,7 +19,7 @@ Route::auth();
 
 Route::get('/home', 'profileController@index')->name('home');
 
-Route::post('comment/store','commentController@create');
+
 
 //profile
 //
@@ -37,3 +37,10 @@ Route::get("status/{status}/edit","statusController@edit");
 Route::patch("status/{status}","statusController@update");
 Route::get("status/{status}/delete","statusController@showDelete");
 Route::delete("status/{status}","statusController@delete");
+
+////////////comment controller///////////////////////
+Route::post('comment/store','commentController@create');
+Route::get("comment/{comment}/edit","commentController@edit");
+Route::patch("comment/{comment}","commentController@update");
+Route::get("comment/{comment}/delete","commentController@deleteShow");
+Route::delete("comment/{comment}","commentController@delete");
