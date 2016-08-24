@@ -19,7 +19,6 @@ Route::auth();
 
 Route::get('/home', 'profileController@index')->name('home');
 
-Route::post('status/store','statusController@create');
 Route::post('comment/store','commentController@create');
 
 //profile
@@ -28,10 +27,13 @@ Route::get('user/{name}','profileController@show');
 Route::get('profile/',function(){redirect()->route('home');});
 Route::get('profile/edit','profileController@edit');
 Route::patch('profile/edit','profileController@update');
-// Route::get('test',function(){
-// 	return view('test');
-// });
-// Route::patch('test',function(Illuminate\Http\Request $req){
-// 	$rules = 
-// 	return $req->all();
-// });
+
+
+////////////status controller///////////////////////
+Route::get("status",function(){return redirect()->route('home');});
+Route::get("status/{status}","statusController@show");
+Route::post('status/store','statusController@create');
+Route::get("status/{status}/edit","statusController@edit");
+Route::patch("status/{status}","statusController@update");
+Route::get("status/{status}/delete","statusController@showDelete");
+Route::delete("status/{status}","statusController@delete");

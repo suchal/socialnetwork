@@ -32,7 +32,7 @@ class HomeController extends Controller
         $user = $this->auth->user();
         $user->load(['profile','status.comments.user.profile']);
         //return $user;
-        $statuses = $user->status;
+        $statuses = $user->status->orderBy('created_at','desc');
         $statuses;
         return view('home',['statuses'=>$statuses, 'user'=> $user]);
     }
