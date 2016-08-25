@@ -5,13 +5,13 @@
     <div class="row">
         <div class="col-md-4">
             <h1>{{$user->profile->fullname}}</h1>
-            @if($canEdit)
+            @can('edit-profile', $user->profile)
                 <a class="btn btn-primary" href="/profile/edit">Edit your profile</a>
-            @endif
+            @endcan
         </div>
+
         <div class="col-md-8">
-        @if ( $canEdit )
-            {{-- expr --}}
+            @can('update', $user->profile)
             <div class="well">
                 <form method="POST" action="/status/store">
                 {{csrf_field()}}
@@ -23,7 +23,7 @@
                     <input type="submit" class="btn btn-primary" name="submit" value="Update your status!"/>
                 </form>
             </div>
-        @endif
+            @endcan
 
             @foreach ($statuses as $status)
                 <div class="well">

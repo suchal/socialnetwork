@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use \App\User;
 use \App\status;
@@ -46,13 +47,15 @@ class statusController extends Controller
     	return view('status.edit',compact('status'));
     }
     public function update(Request $req, status $status){
-
-    	$this->validate($req,$this->rules);
-        $status->update(['text'=>$req->text]);
-    	return back();
+        if(Gate::allows('update',$status)){
+        	$this->validate($req,$this->rules);
+            $status->update(['text'=>$req->text]);
+        	return redirect()->route('home');
+        }
+        return redirect()->route('home');       
     }
 
-    public function showDelete(Status $status){
+    public function showDelete(Request $req, Status $status){
     	try{
     		if(!$status) throw new Exception("Not Found");
     	}
@@ -65,6 +68,9 @@ class statusController extends Controller
     }
 
     public function delete(status $status){
+        if(Gate::allows('delete',$status))
     	$status->delete();
+
+        return redirect()->route('home');
     }
 }
