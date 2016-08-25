@@ -13,7 +13,7 @@
 			{{ method_field("PATCH") }}
 			<div class="form-group {{ $errors->has('body') ? "has-error" : " " }}" >
 				<label for='body' class="control-label">Comment:</label>
-				<input type="text" class="form-control" name="body" value="{{ old("body") }}">
+				<input type="text" class="form-control" name="body" value="{{ $comment->body }}">
 				@if ($errors->has('body'))
 				<span class="help-block">
 					<strong>{{ $errors->first('body') }}</strong>

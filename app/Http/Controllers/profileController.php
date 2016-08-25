@@ -8,6 +8,7 @@ use App\profile;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 
 
@@ -39,12 +40,9 @@ class profileController extends Controller
 	}
 	private function viewProfile($user)
 	{
-		$canEdit =false;
-		if($this->auth->user()->id == $user->id) $canEdit = true;
 		$user->load(['profile','status.comments.user.profile']);
         $statuses = $user->status;
-        $statuses;
-        return view('home',['statuses'=>$statuses, 'user'=> $user, 'canEdit'=>$canEdit]);
+        return view('home',['statuses'=>$statuses, 'user'=> $user]);
 	}
 
 	public function edit()
@@ -68,8 +66,10 @@ class profileController extends Controller
     {
         return checkdate($data['month'],$data['date'],$data['year']);
     }
+
 	public function update(Request $req)
 	{
+		if(Gate::allows('update',$profile));
 		$rules = [
 			'fullname' => ['required', 'min:3'],
 			'date' 	   => ['required','numeric','min:1','max:31'],

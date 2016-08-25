@@ -21,8 +21,7 @@ Route::get('/home', 'profileController@index')->name('home');
 
 
 
-//profile
-//
+//////////profile///////////////////////////////////
 Route::get('user/{name}','profileController@show');
 Route::get('profile/',function(){redirect()->route('home');});
 Route::get('profile/edit','profileController@edit');

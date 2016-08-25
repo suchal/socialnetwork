@@ -43,4 +43,8 @@ class User extends Authenticatable
     {
         $this->profile->update($data);
     }
+
+    public function owns($resource){
+        return $resource->user_id == $this->id;
+    }
 }

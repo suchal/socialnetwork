@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use Illuminate\Contracts\Auth\Factory as Auth;
-use \App\status;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use \App\comment;
+use \App\status;
 class commentController extends Controller
 {
 	protected $rules = ['body'=>'required','status_id'=>'required|numeric'];
@@ -33,16 +33,21 @@ class commentController extends Controller
         return view("comment.edit",compact('user','comment'));
     }
     public function update(Request $req, comment $comment){
-        $rules = ['body'=>['required','min:3','max:200']];
-        $this->validate($req,$rules);
-        $comment->update(["body"=>$req->body]);
+        if(Gate::allows('update',$comment)){       
+            $rules = ['body'=>['required','min:3','max:200']];
+            $this->validate($req,$rules);
+            $comment->update(["body"=>$req->body]);
+        }
         return redirect()->route('home');
     }
     public function deleteShow(comment $comment){
         return view("comment.delete",compact('comment'));
     }
     public function delete(Request $req, comment $comment){
-        $comment->delete();
+        if(Gate::allows('delete', $comment)){
+            $comment->delete();
+        }
         return redirect()->route('home');
+
     }
 }
