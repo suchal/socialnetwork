@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('title')
+	Edit Your Status
+@stop
 @section('content')
 	<div class="container">
 		

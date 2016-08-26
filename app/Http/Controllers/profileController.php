@@ -40,9 +40,12 @@ class profileController extends Controller
 	}
 	private function viewProfile($user)
 	{
-		$user->load(['profile','status.comments.user.profile']);
-        $statuses = $user->status;
-        return view('home',['statuses'=>$statuses, 'user'=> $user]);
+
+		$user->load('profile');
+        $statuses = $user->status()->orderBy('created_at','desc')->get()->load('comments.user.profile');
+        $data = ['statuses'=>$statuses, 'user'=> $user];
+        if($user->profile->profile_picture) $data['pic'] = $user->profile->profile_picture;
+        return view('home',$data);
 	}
 
 	public function edit()
@@ -69,24 +72,31 @@ class profileController extends Controller
 
 	public function update(Request $req)
 	{
+
+		$profile = $this->auth->user()->profile;
 		if(Gate::allows('update',$profile));
 		$rules = [
 			'fullname' => ['required', 'min:3'],
 			'date' 	   => ['required','numeric','min:1','max:31'],
 			'month'    => ['required','numeric','min:1','max:12'],
-			'year' 	   => ['required','numeric','min:1900',"max:2016"]
+			'year' 	   => ['required','numeric','min:1900',"max:2016"],
 		];
+		$hasPic = $req->hasFile('pic');
+		if($hasPic) $rules['pic'] = ['required','image','max:10000'];
 		$this->validate($req,$rules);
-			if (!$this->validateDate($req->all()) ) 
-				return redirect('profile/edit')->withErrors(["date"=>"Enter a valid date!"])->withInput($req->all());
-			$data=[];
-			$data['dob']= "{$req->year}-{$req->month}-{$req->date}";
-			$data['fullname']=$req->fullname;
-			$data['age']= ( new \DateTime($data['dob']) )->diff( new \DateTime('now') )->y;
-			$profile = $this->auth->user()->profile;
-			$profile->update($data);
-			//return [$data,$profile];	
-			return back();// redirect()->route('home');
+		if (!$this->validateDate($req->all()) ) 
+			return redirect('profile/edit')->withErrors(["date"=>"Enter a valid date!"])->withInput($req->all());
+		$picName = rand(1000000,999999).'_'.$this->auth->user()->id.'.jpg';
+		$req->file('pic')->move('pics',$picName);
+		//preparing data to be updated
+		$data=[];
+		$data['dob']= "{$req->year}-{$req->month}-{$req->date}";
+		$data['fullname']=$req->fullname;
+		$data['age']= ( new \DateTime($data['dob']) )->diff( new \DateTime('now') )->y;
+		if($hasPic) $data['profile_picture'] = $picName;
+		$profile->update($data);
+		return redirect()->route('home')->with('message','Profile Updated!');
+			
 
 	}
 	

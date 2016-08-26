@@ -1,11 +1,15 @@
 @extends('layouts.app')
-
+@section('title')
+    {{ $user->username }}'s Wall
+@stop
 @section('content')
 <div class="container">
     <div class="row">
         <div class="col-md-4">
+            <img src="/pics/{{ $pic??"hello" }}" width="100px" height="100px">
             <h1>{{$user->profile->fullname}}</h1>
-            @can('edit-profile', $user->profile)
+
+            @can('update', $user->profile)
                 <a class="btn btn-primary" href="/profile/edit">Edit your profile</a>
             @endcan
         </div>
