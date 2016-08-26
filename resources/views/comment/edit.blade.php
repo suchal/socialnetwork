@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('title')
+	Edit your comment
+@stop
 @section('content')
 	<div class="container">
 		

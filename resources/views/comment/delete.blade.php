@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('title')
+	delete comment
+@stop
 @section('content')
 	<div class="container">
 		<form method="post" action="/comment/{{ $comment->id }} ">

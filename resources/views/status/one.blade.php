@@ -1,6 +1,7 @@
 <div class="clearfix">
     <div class="col-md-5">
-        <h4>{{ $status->user->username }}</h4>
+        <img src="/pics/{{ $status->user->profile->profile_picture }}" width="50px" height="50px">
+        {{ $status->user->username }}
     </div>
     @can('update', $status)
     <div class="col-md-2 col-md-offset-4">
@@ -10,14 +11,16 @@
     </div>
     @endcan
 </div>
-    <h2>{{$status->text}}</h2>
+<h2 style="padding: 10px">{{$status->text}}</h2>
 @if (count($status->comments)>0)
 <h5>Comments:</h5>
 
 @foreach ($status->comments as $comment)
 <div class="well clearfix">
-        <div class="col-md-6">{{$comment->user->username}}:</div>
-
+        <div class="col-md-6">
+            <img src="/pics/{{ $comment->user->profile->profile_picture }}" width="50px" height="50px">
+            {{$comment->user->username}}:
+        </div>
         <div class="col-md-2 col-md-offset-4">
             @can('update', $comment)
             <a href="/comment/{{ $comment->id }}/edit">Edit</a>
@@ -32,7 +35,7 @@
 @endforeach
 @endif
 
-<div class="row">
+<div class="row clearfix">
     <form method="POST" action="/comment\store">
         {{csrf_field()}}
         <input type="hidden" name="status_id" value="{{$status->id}}">
