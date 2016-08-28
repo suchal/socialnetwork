@@ -36,4 +36,10 @@ class statusPolicy
     {
         
     }
+
+    public function comment(User $user, status $status){
+        if($status->user->id == $user->id) return true;
+        if($status->user->isFriend($user)) return true;
+        return false;
+    }
 }

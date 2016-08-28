@@ -40,10 +40,21 @@ class profileController extends Controller
 	}
 	private function viewProfile($user)
 	{
+		$authUser = $this->auth->user();
+		$data=[];
+		if($user->id == $authUser->id){
+			$data['own'] = true;
+		}
+		else{
+			if($authUser->isFriend($user)) $data['friend'] = true;
+			elseif($authUser->hasSentFriendOffer($user)) $data['friendOfferSent']='true';
+			elseif($friendOffer = $authUser->hasReceivedFriendOffer($user)) $data['friendOffer'] = $friendOffer;
+		}
 
 		$user->load('profile');
         $statuses = $user->status()->orderBy('created_at','desc')->get()->load('comments.user.profile');
-        $data = ['statuses'=>$statuses, 'user'=> $user];
+        $data['statuses'] = $statuses;
+        $data['user'] =  $user;
         if($user->profile->profile_picture) $data['pic'] = $user->profile->profile_picture;
         return view('home',$data);
 	}

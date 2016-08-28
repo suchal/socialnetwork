@@ -9,9 +9,19 @@
             <img src="/pics/{{ $pic??"hello" }}" width="100px" height="100px">
             <h1>{{$user->profile->fullname}}</h1>
 
-            @can('update', $user->profile)
+            @if ($own??false)
                 <a class="btn btn-primary" href="/profile/edit">Edit your profile</a>
-            @endcan
+            @elseif($friend??false)
+                <a class="btn btn-primary" href="#">Friend!</a>
+            @elseif($friendOfferSent??false)
+                <a class="btn btn-primary" href="#">Friendship Offer Sent!</a>
+            @elseif($friendOffer??false)
+                <a class="btn btn-primary" href="/friend/accept/{{ $friendOffer->id}}">Accept Friendship Offer</a>
+            @else
+            {{-- @can('sendFriendOffer',$user) --}}
+                <a class="btn btn-primary" href="/friend/send/{{ $user->id }}">Send Friendship Offer</a>
+            {{-- @endcan --}}
+            @endif
         </div>
 
         <div class="col-md-8">

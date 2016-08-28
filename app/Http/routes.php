@@ -43,3 +43,8 @@ Route::get("comment/{comment}/edit","commentController@edit");
 Route::patch("comment/{comment}","commentController@update");
 Route::get("comment/{comment}/delete","commentController@deleteShow");
 Route::delete("comment/{comment}","commentController@delete");
+
+
+/////////////////////////***[friends]***/////////////////////////
+Route::get('/friend/send/{user}','friendController@sendOffer');
+Route::get('friend/accept/{offer}','friendController@acceptOffer');

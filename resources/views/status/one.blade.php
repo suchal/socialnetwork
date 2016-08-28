@@ -36,6 +36,7 @@
 @endforeach
 @endif
 
+@can('comment', $status)
 <div class="row clearfix">
     <form method="POST" action="/comment\store">
         {{csrf_field()}}
@@ -46,4 +47,5 @@
         </div>
         <input type="submit" name="submit" class="btn">
     </form>
-</div>
+</div>@endcan
+

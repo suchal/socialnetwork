@@ -17,6 +17,8 @@ class AuthServiceProvider extends ServiceProvider
         'App\status' => 'App\Policies\statusPolicy',
         'App\comment' => 'App\Policies\commentPolicy',
         'App\profile' => 'App\Policies\profilePolicy',
+        'App\FriendOffer' => 'App\Policies\FriendOfferPolicy',
+        'App\status' => 'App\Policies\statusPolicy'
     ];
     /**
      * Register any application authentication / authorization services.
